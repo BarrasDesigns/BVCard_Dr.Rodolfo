@@ -1,62 +1,59 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. Generar y Guardar Contacto (Híbrido: Android Intent / vCard) ---
+    // --- 1. Generar y Guardar Contacto Universal (vCard 3.0) ---
     const btnSaveContact = document.getElementById('btnSaveContact');
     
     if (btnSaveContact) {
         btnSaveContact.addEventListener('click', (e) => {
             e.preventDefault();
 
-            // Centralizamos la data para usarla en ambos métodos
+            // Datos del contacto centralizados
             const contactData = {
                 name: "Dr. Rogelio Carranza",
                 phone: "+528111576796",
                 company: "Terapia Celular Nanotecnología",
-                title: "Asesor Médico",
+                title: "Asesor Médico de Siniestros Gastos Médicos",
                 street: "Ruperto Martínez 1235",
                 city: "Monterrey",
                 state: "Nuevo León",
                 zip: "64000",
                 country: "México",
-                url: window.location.href
+                url: window.location.href,
+                mapsUrl: "https://maps.app.goo.gl/aGuRnTpVSEsGXrcTA"
             };
 
-            // Detección del sistema operativo
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const isAndroid = /android/i.test(userAgent);
+            // Estructura vCard 3.0 estándar (MÁXIMA COMPATIBILIDAD)
+            const vCardString = [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                'N:Carranza;Rogelio;;Dr.;',
+                `FN:${contactData.name}`,
+                `ORG:${contactData.company}`,
+                `TITLE:${contactData.title}`,
+                `TEL;TYPE=WORK,VOICE:${contactData.phone}`,
+                `TEL;TYPE=CELL,VOICE:${contactData.phone}`,
+                `ADR;TYPE=WORK:;;${contactData.street};${contactData.city};${contactData.state};${contactData.zip};${contactData.country}`,
+                `URL:${contactData.url}`,
+                `NOTE:Ubicación Google Maps: ${contactData.mapsUrl}`,
+                'END:VCARD'
+            ].join('\r\n');
+
+            // Detectar si el usuario está en Android
+            const isAndroid = /android/i.test(navigator.userAgent || navigator.vendor || window.opera);
 
             if (isAndroid) {
-                // APROXIMACIÓN ANDROID: Uso de URI Intent nativo
-                // Abre directamente la interfaz de "Agregar Contacto" del sistema
-                const intentURI = 
-                    `intent:#Intent;` +
-                    `action=android.intent.action.INSERT;` +
-                    `type=vnd.android.cursor.dir/contact;` +
-                    `S.name=${encodeURIComponent(contactData.name)};` +
-                    `S.phone=${encodeURIComponent(contactData.phone)};` +
-                    `S.company=${encodeURIComponent(contactData.company)};` +
-                    `S.job_title=${encodeURIComponent(contactData.title)};` +
-                    `S.notes=${encodeURIComponent("Perfil digital: " + contactData.url)};` +
-                    `end`;
+                // TÉCNICA ANDROID: Data URI con MIME-type application/vcard
+                // Forzar al intent del sistema Android a ofrecer la App de Contactos como receptor
+                const dataUri = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vCardString);
                 
-                // Redirigir al intent (El navegador delega la acción al OS)
-                window.location.href = intentURI;
-
+                const link = document.createElement('a');
+                link.href = dataUri;
+                link.setAttribute('download', 'Dr_Rogelio_Carranza.vcf');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             } else {
-                // APROXIMACIÓN iOS / ESCRITORIO: Uso de vCard 3.0
-                // Safari en iOS procesa nativamente los vCard sin mandarlos a descargas
-                const vCardString = `BEGIN:VCARD
-VERSION:3.0
-N:Carranza;Rogelio;;Dr.;
-FN:${contactData.name}
-ORG:${contactData.company}
-TITLE:${contactData.title}
-TEL;TYPE=WORK,VOICE:${contactData.phone}
-ADR;TYPE=WORK:;;${contactData.street};${contactData.city};${contactData.state};${contactData.zip};${contactData.country}
-URL:${contactData.url}
-NOTE:Asesor Médico de Siniestros Gastos Médicos
-END:VCARD`;
-
+                // TÉCNICA iOS / WINDOWS / MAC: Blob + Object URL
                 const blob = new Blob([vCardString], { type: 'text/vcard;charset=utf-8' });
                 const url = window.URL.createObjectURL(blob);
                 
@@ -67,10 +64,32 @@ END:VCARD`;
                 link.click();
                 
                 document.body.removeChild(link);
-                setTimeout(() => window.URL.revokeObjectURL(url), 100);
+                setTimeout(() => window.URL.revokeObjectURL(url), 200);
             }
         });
     }
 
-    // ... (Aquí mantienes tu código existente de btnShare para Web Share API)
+    // --- 2. Compartir Perfil (Web Share API) ---
+    const btnShare = document.getElementById('btnShare');
+    
+    if (btnShare) {
+        btnShare.addEventListener('click', async () => {
+            const shareData = {
+                title: 'Dr. Rogelio Carranza | BVCard',
+                text: 'Te comparto la tarjeta digital del Dr. Rogelio Carranza.',
+                url: window.location.href
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert('¡Enlace de la tarjeta copiado al portapapeles!');
+                }
+            } catch (err) {
+                console.error('Error al compartir:', err);
+            }
+        });
+    }
 });
