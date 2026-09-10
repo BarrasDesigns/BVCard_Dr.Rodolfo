@@ -1,13 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- 1. Generar y Guardar Contacto Universal (vCard 3.0) ---
+
+    // ==========================================
+    // 1. GUARDAR CONTACTO (vCard 3.0 Universal)
+    // ==========================================
     const btnSaveContact = document.getElementById('btnSaveContact');
-    
+
     if (btnSaveContact) {
         btnSaveContact.addEventListener('click', (e) => {
             e.preventDefault();
 
-            // Datos del contacto centralizados
+            // Datos centralizados del Dr. Rogelio Carranza
             const contactData = {
                 name: "Dr. Rogelio Carranza",
                 phone: "+528111576796",
@@ -22,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 mapsUrl: "https://maps.app.goo.gl/aGuRnTpVSEsGXrcTA"
             };
 
-            // Estructura vCard 3.0 estándar (MÁXIMA COMPATIBILIDAD)
+            // Estructura vCard 3.0 estándar (utiliza CRLF \r\n para compatibilidad estricta)
             const vCardString = [
                 'BEGIN:VCARD',
                 'VERSION:3.0',
@@ -38,14 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 'END:VCARD'
             ].join('\r\n');
 
-            // Detectar si el usuario está en Android
+            // Detección de Android
             const isAndroid = /android/i.test(navigator.userAgent || navigator.vendor || window.opera);
 
             if (isAndroid) {
-                // TÉCNICA ANDROID: Data URI con MIME-type application/vcard
-                // Forzar al intent del sistema Android a ofrecer la App de Contactos como receptor
+                // TÉCNICA ANDROID: Data URI codificada en UTF-8 para disparar la app de contactos nativa
                 const dataUri = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vCardString);
-                
+
                 const link = document.createElement('a');
                 link.href = dataUri;
                 link.setAttribute('download', 'Dr_Rogelio_Carranza.vcf');
@@ -56,22 +57,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 // TÉCNICA iOS / WINDOWS / MAC: Blob + Object URL
                 const blob = new Blob([vCardString], { type: 'text/vcard;charset=utf-8' });
                 const url = window.URL.createObjectURL(blob);
-                
+
                 const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', 'Dr_Rogelio_Carranza.vcf');
                 document.body.appendChild(link);
                 link.click();
-                
+
                 document.body.removeChild(link);
                 setTimeout(() => window.URL.revokeObjectURL(url), 200);
             }
         });
     }
 
-    // --- 2. Compartir Perfil (Web Share API) ---
+    // ==========================================
+    // 2. COMPARTIR PERFIL (Web Share API)
+    // ==========================================
     const btnShare = document.getElementById('btnShare');
-    
+
     if (btnShare) {
         btnShare.addEventListener('click', async () => {
             const shareData = {
@@ -84,12 +87,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (navigator.share) {
                     await navigator.share(shareData);
                 } else {
+                    // Fallback para navegadores de escritorio que no soportan la Web Share API
                     await navigator.clipboard.writeText(window.location.href);
                     alert('¡Enlace de la tarjeta copiado al portapapeles!');
                 }
             } catch (err) {
-                console.error('Error al compartir:', err);
+                // Previene registrar errores en consola si el usuario cancela la ventana de compartir
+                if (err.name !== 'AbortError') {
+                    console.error('Error al compartir:', err);
+                }
             }
         });
     }
+
 });
