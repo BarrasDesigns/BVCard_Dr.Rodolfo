@@ -17,7 +17,7 @@
     <!-- CSS Personalizado -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Tailwind CSS (CDN para desarrollo) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -28,9 +28,9 @@
                     },
                     colors: {
                         brand: {
-                            primary: '#2B4C7E', // Color institucional médico/holístico
-                            secondary: '#567EBB',
-                            accent: '#D4AF37' // Dorado para toque de autoridad/holístico
+                            primary: '#231a9a',   // Azul Principal
+                            secondary: '#312975', // Azul Oscuro
+                            accent: '#ffffff'     // Blanco
                         }
                     }
                 }
@@ -44,34 +44,30 @@
     <!-- Contenedor Principal Tap-It (Max 430px simula pantalla móvil) -->
     <main class="w-full max-w-[430px] bg-white min-h-screen shadow-2xl relative overflow-hidden">
 
-        <!-- Cabecera / Cover Photo -->
-        <header
-            class="h-40 bg-gradient-to-r from-brand-primary to-brand-secondary relative rounded-b-[2.5rem] shadow-md">
-            <!-- Reproductor de Audio Oculto / Botón Flotante -->
-           <!-- <button id="btnAudio"
-                class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm p-3 rounded-full text-white hover:bg-white/40 transition">
-                <i class="fa-solid fa-volume-high"></i>
-            </button>
-            <audio id="audioElement" src="./audio/kikeMillan3_final.mp3" preload="none"></audio>-->
+        <!-- Cabecera / Cover Photo con Logo -->
+        <header class="h-44 bg-gradient-to-r from-brand-primary to-brand-secondary relative rounded-b-[2.5rem] shadow-md flex items-center justify-center pb-8 pt-4 px-4">
+            <!-- Logo de Medicina Biológica y Regenerativa -->
+            <img src="./logo.png" alt="Medicina Biológica y Regenerativa Logo" class="h-20 max-w-[80%] object-contain drop-shadow-md"
+                 onerror="this.style.display='none'">
         </header>
 
         <!-- Sección de Perfil y Marco Fotográfico -->
-        <section class="flex flex-col items-center -mt-20 px-6">
+        <section class="flex flex-col items-center -mt-16 px-6">
             <!-- Marco Fotográfico Animado -->
-            <div
-                class="relative w-36 h-40 rounded-full p-1 bg-gradient-to-tr from-brand-accent via-yellow-200 to-brand-primary shadow-xl pulse-border">
+            <div class="relative w-36 h-36 rounded-full p-1 bg-gradient-to-tr from-brand-primary via-brand-secondary to-indigo-500 shadow-xl pulse-border">
                 <div class="w-full h-full rounded-full border-4 border-white overflow-hidden bg-white">
-                    <!-- Placeholder para la foto del doctor -->
+                    <!-- Foto del Doctor -->
                     <img src="./foto1.png" alt="Dr. Rogelio Carranza" class="w-full h-full object-cover"
-                        onerror="this.src='https://ui-avatars.com/api/?name=Kike+Millan&background=2B4C7E&color=fff&size=150'">
+                        onerror="this.src='https://ui-avatars.com/api/?name=Rogelio+Carranza&background=231a9a&color=fff&size=150'">
                 </div>
             </div>
 
             <div class="text-center mt-4 mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">Dr. Rogelio Carranza García</h1>
-                <p class="text-sm font-medium text-brand-primary uppercase tracking-wide mt-1">Medicina Biológica Regenerativa
+                <p class="text-sm font-semibold text-brand-primary uppercase tracking-wide mt-1">
+                    Medicina Biológica Regenerativa
                 </p>
-                <p class="text-gray-500 text-sm mt-2">REGENERAR <span>•</span> RESTAURAR <span>•</span> OPTIMIZAR</p>
+                <p class="text-gray-500 text-xs font-medium mt-2 tracking-wider">REGENERAR <span>•</span> RESTAURAR <span>•</span> OPTIMIZAR</p>
             </div>
 
             <!-- Botones Core (Acciones Tap-It) -->
@@ -121,54 +117,44 @@
         <!-- Enlaces de Servicios y Productos -->
         <section class="px-6 mb-10 space-y-3">
             <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Servicios</h2>
-        
-            <!-- Opción para enlace de ubicación también dentro de la lista de servicios -->
-            <a href="https://maps.app.goo.gl/aGuRnTpVSEsGXrcTA" target="_blank" rel="noopener noreferrer" class="link-card group">
+
+            <!-- Ubicación -->
+            <a href="https://maps.app.goo.gl/aGuRnTpVSEsGXrcTA" target="_blank" rel="noopener noreferrer" class="link-card group flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition border border-gray-100">
                 <div class="bg-red-100 p-3 rounded-lg text-red-600 group-hover:bg-red-500 group-hover:text-white transition">
                     <i class="fa-solid fa-map-location-dot"></i>
                 </div>
-                <span class="font-medium text-gray-700 ml-3">Ubicación del Consultorio</span>
-                <i class="fa-solid fa-arrow-up-right-from-square ml-auto text-gray-300 text-sm"></i>
-            </a>
-            
-            <a href="#" class="link-card group">
-                <div
-                    class="bg-brand-primary/10 p-3 rounded-lg text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition">
-                    <i class="fa-solid fa-brain"></i>
-                </div>
-                <span class="font-medium text-gray-700 ml-3">Servicio 1</span>
-                <i class="fa-solid fa-chevron-right ml-auto text-gray-300"></i>
-            </a>
-
-            <a href="#" class="link-card group">
-                <div
-                    class="bg-brand-accent/20 p-3 rounded-lg text-brand-accent group-hover:bg-brand-accent group-hover:text-white transition">
-                    <i class="fa-solid fa-gem"></i>
-                </div>
-                <span class="font-medium text-gray-700 ml-3">MServicio 2</span>
+                <span class="font-medium text-gray-700 ml-3 text-sm">Ubicación del Consultorio</span>
                 <i class="fa-solid fa-arrow-up-right-from-square ml-auto text-gray-300 text-sm"></i>
             </a>
 
-            <a href="#" class="link-card group">
-                <div
-                    class="bg-brand-secondary/10 p-3 rounded-lg text-brand-secondary group-hover:bg-brand-secondary group-hover:text-white transition">
-                    <i class="fa-solid fa-chalkboard-user"></i>
+            <!-- Servicio 1 -->
+            <a href="#" class="link-card group flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition border border-gray-100">
+                <div class="bg-brand-primary/10 p-3 rounded-lg text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition">
+                    <i class="fa-solid fa-dna"></i>
                 </div>
-                <span class="font-medium text-gray-700 ml-3">Servicio 3</span>
+                <span class="font-medium text-gray-700 ml-3 text-sm">Terapia Celular y Regenerativa</span>
+                <i class="fa-solid fa-chevron-right ml-auto text-gray-300 text-sm"></i>
+            </a>
+
+            <!-- Servicio 2 -->
+            <a href="#" class="link-card group flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition border border-gray-100">
+                <div class="bg-brand-secondary/10 p-3 rounded-lg text-brand-secondary group-hover:bg-brand-secondary group-hover:text-white transition">
+                    <i class="fa-solid fa-flask"></i>
+                </div>
+                <span class="font-medium text-gray-700 ml-3 text-sm">Nanotecnología Médica</span>
+                <i class="fa-solid fa-arrow-up-right-from-square ml-auto text-gray-300 text-sm"></i>
+            </a>
+
+            <!-- Servicio 3 -->
+            <a href="#" class="link-card group flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition border border-gray-100">
+                <div class="bg-brand-primary/10 p-3 rounded-lg text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <span class="font-medium text-gray-700 ml-3 text-sm">Asesoría Médica Especializada</span>
                 <i class="fa-solid fa-arrow-up-right-from-square ml-auto text-gray-300 text-sm"></i>
             </a>
         </section>
 
-        <!-- Footer / Créditos -->
-        <!--<footer class="bg-gray-50 py-6 text-center border-t border-gray-100 mt-auto">
-            <a href="https://www.barras-designs.com.mx/" target="_blank"
-                class="flex flex-col items-center justify-center opacity-70 hover:opacity-100 transition">
-                <img src="./img/bdLogo.png" alt="Barras Designs Logo" class="h-6 mb-2 grayscale"
-                    onerror="this.style.display='none'">
-                <p class="text-[10px] text-gray-500 font-medium">Software & Soluciones Digitales por <br><strong
-                        class="text-gray-700">Barras Designs</strong> &copy; 2026</p>
-            </a>
-        </footer>-->
     </main>
 
     <script src="app.js"></script>
